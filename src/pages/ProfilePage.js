@@ -9,6 +9,32 @@ const ProfilePage = ({ navigation }) => {
     const [age, setAge] = useState('');
     const [goal, setGoal] = useState('lose');
 
+    const handleCreateProfile = () => {
+        const user = firebase.auth().currentUser;
+        const uid = user.uid;
+      
+        const profileRef = firebase.database().ref(`profiles/${uid}`);
+      
+        const newProfile = {
+          weight: parseInt(weight),
+          height: parseInt(height),
+          age: parseInt(age),
+          gender,
+          fitnessGoal,
+        };
+      
+        console.log("New profile data:", newProfile);
+      
+        profileRef.set(newProfile, (error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Profile created successfully");
+            navigation.navigate("Workout");
+          }
+        });
+      };      
+
     const handleSubmit = () => {
         const bmi = calculateBMI(weight, height);
         const calorieIntake = calculateCalorieIntake(weight, goalWeight, height, age, goal);
