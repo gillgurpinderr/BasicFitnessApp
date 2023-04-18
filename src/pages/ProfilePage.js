@@ -118,43 +118,49 @@ const ProfilePage = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#003f5c',
         justifyContent: 'center',
         paddingHorizontal: 20,
     },
     title: {
         fontSize: 24,
+        fontWeight: 'bold',
         textAlign: 'center',
+        color: '#fb5b5a',
         marginBottom: 20,
     },
     input: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        paddingHorizontal: 10,
+        backgroundColor: '#f2f2f2',
+        borderRadius: 25,
+        paddingHorizontal: 20,
         paddingVertical: 5,
         marginBottom: 10,
+        color: '#424242',
     },
     button: {
-        backgroundColor: 'blue',
+        backgroundColor: '#00bfa5',
         padding: 10,
-        borderRadius: 4,
+        borderRadius: 25,
         marginBottom: 10,
     },
     buttonText: {
         color: 'white',
         textAlign: 'center',
+        fontWeight: 'bold',
     },
     activeGoal: {
-        backgroundColor: 'darkblue',
+        backgroundColor: '#fb5b5a',
     },
     submitButton: {
-        backgroundColor: 'green',
+        backgroundColor: '#00bfa5',
         padding: 10,
-        borderRadius: 4,
+        borderRadius: 25,
+        marginTop: 20,
     },
     submitButtonText: {
         color: 'white',
         textAlign: 'center',
+        fontWeight: 'bold',
     },
 });
 

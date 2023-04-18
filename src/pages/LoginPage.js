@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert } from 'reac
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
-const LoginPage = ({ navigation }) => {
+export default function LoginPage({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -41,59 +41,156 @@ const LoginPage = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Login</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.logo}>HealthBoost</Text>
+            <Text style={styles.subtitle}>Stay Healthy, Stay Strong</Text>
+            <View style={styles.inputView}>
+                <TextInput
+                    style={styles.inputText}
+                    placeholder="Username or Email"
+                    placeholderTextColor="#003f5c"
+                    value={username}
+                    onChangeText={setUsername}
+                />
+            </View>
+            <View style={styles.inputView}>
+                <TextInput
+                    style={styles.inputText}
+                    secureTextEntry
+                    placeholder="Password"
+                    placeholderTextColor="#003f5c"
+                    value={password}
+                    onChangeText={setPassword}
+                />
+            </View>
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+                <Text style={styles.loginText}>LOG IN</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+                <Text style={styles.signupText}>Don't have an account? Sign up now</Text>
+            </TouchableOpacity>
+            <View style={styles.orView}>
+                <View style={styles.orLine}></View>
+                <Text style={styles.orText}>or</Text>
+                <View style={styles.orLine}></View>
+            </View>
+            <TouchableOpacity style={styles.loginBtnFacebook}>
+                <Text style={styles.loginTextFacebook}>Sign Up with Facebook</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.loginBtnGoogle}>
+                <Text style={styles.loginTextGoogle}>Sign Up with Google</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={handleRegister}>
                 <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#003f5c',
+        alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20,
     },
-    title: {
-        fontSize: 24,
-        textAlign: 'center',
+    logo: {
+        fontWeight: 'bold',
+        fontSize: 48,
+        color: '#fb5b5a',
+        marginBottom: 5,
+        letterSpacing: 2,
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#616161',
+        marginBottom: 40,
+    },
+    inputView: {
+        width: '100%',
+        backgroundColor: '#f2f2f2',
+        borderRadius: 25,
+        height: 50,
+        marginBottom: 20,
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+    },
+    inputText: {
+        height: 50,
+        color: '#424242',
+    },
+    loginBtn: {
+        width: '100%',
+        backgroundColor: '#00bfa5',
+        borderRadius: 25,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        marginBottom: 10,
+    },
+    loginText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    signupText: {
+        color: '#616161',
+        marginTop: 15,
         marginBottom: 20,
     },
-    input: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
+    orView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    orLine: {
+        height: 1,
+        flex: 1,
+        backgroundColor: '#e0e0e0',
+    },
+    loginBtnFacebook: {
+        width: '100%',
+        backgroundColor: '#3b5998',
+        borderRadius: 25,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
         marginBottom: 10,
     },
-    button: {
-        backgroundColor: 'blue',
-        padding: 10,
-        borderRadius: 4,
+    loginTextFacebook: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    loginBtnGoogle: {
+        width: '100%',
+        backgroundColor: '#DB4437',
+        borderRadius: 25,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
         marginBottom: 10,
+    },
+    loginTextGoogle: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    button: {
+        backgroundColor: '#00bfa5',
+        padding: 10,
+        borderRadius: 25,
+        marginTop: 20,
+        width: '100%',
     },
     buttonText: {
         color: 'white',
+        fontWeight: 'bold',
         textAlign: 'center',
     },
 });
 
-export default LoginPage;
+
+
+
+
