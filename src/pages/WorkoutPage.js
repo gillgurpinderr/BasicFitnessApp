@@ -29,22 +29,29 @@ const WorkoutPage = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Log your workout:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Duration (minutes)"
-        value={duration}
-        onChangeText={setDuration}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Weight (lbs)"
-        value={weight}
-        onChangeText={setWeight}
-        keyboardType="numeric"
-      />
-      <Button title="Add Workout" onPress={fetchWorkouts} />
+      <Text style={styles.logo}>Workout Plan</Text>
+      <Text style={styles.subtitle}>Log your workout:</Text>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.inputText}
+          placeholder="Duration (minutes)"
+          value={duration}
+          onChangeText={setDuration}
+          keyboardType="numeric"
+        />
+      </View>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.inputText}
+          placeholder="Weight (lbs)"
+          value={weight}
+          onChangeText={setWeight}
+          keyboardType="numeric"
+        />
+      </View>
+      <View style={styles.button}>
+        <Button title="Add Workout" onPress={fetchWorkouts} color='#fff' />
+      </View>
       {workouts.map((workout, index) => (
         <View key={index} style={styles.workoutContainer}>
           <Text style={styles.workoutText}>
@@ -59,21 +66,42 @@ const WorkoutPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#003f5c',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
-  text: {
-    fontSize: 20,
+  logo: {
     fontWeight: 'bold',
-    marginBottom: 20
+    fontSize: 48,
+    color: '#fb5b5a',
+    marginBottom: 5,
+    letterSpacing: 2,
   },
-  input: {
-    width: 200,
-    height: 40,
-    padding: 10,
+  subtitle: {
+    fontSize: 16,
+    color: '#fff',
     marginBottom: 20,
-    backgroundColor: '#eee',
-    borderRadius: 10
+  },
+  inputView: {
+    width: '100%',
+    backgroundColor: '#f2f2f2',
+    borderRadius: 25,
+    height: 50,
+    marginBottom: 20,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  inputText: {
+    height: 50,
+    color: '#424242',
+  },
+  button: {
+    backgroundColor: '#00bfa5',
+    padding: 10,
+    borderRadius: 25,
+    marginTop: 20,
+    width: '100%',
   },
   workoutContainer: {
     backgroundColor: '#ddd',

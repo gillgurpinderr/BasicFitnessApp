@@ -1,32 +1,39 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
 export default function LoginPage({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = () => {
+        setLoading(true);
         firebase
             .auth()
             .signInWithEmailAndPassword(username, password)
             .then(() => {
+                setLoading(false);
                 navigation.navigate('Profile');
             })
             .catch((error) => {
+                setLoading(false);
                 Alert.alert('Error', error.message);
             });
     };
 
     const handleRegister = () => {
+        setLoading(true);
         firebase
             .auth()
             .createUserWithEmailAndPassword(username, password)
             .then(() => {
+                setLoading(false);
                 navigation.navigate('Profile');
             })
             .catch((error) => {
+                setLoading(false);
                 let errorCode = error.code;
                 let errorMessage = error.message;
                 if (errorCode === 'auth/weak-password') {
@@ -41,50 +48,60 @@ export default function LoginPage({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.logo}>HealthBoost</Text>
-            <Text style={styles.subtitle}>Stay Healthy, Stay Strong</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="Username or Email"
-                    placeholderTextColor="#003f5c"
-                    value={username}
-                    onChangeText={setUsername}
-                />
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    secureTextEntry
-                    placeholder="Password"
-                    placeholderTextColor="#003f5c"
-                    value={password}
-                    onChangeText={setPassword}
-                />
-            </View>
-            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-                <Text style={styles.loginText}>LOG IN</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                <Text style={styles.signupText}>Don't have an account? Sign up now</Text>
-            </TouchableOpacity>
-            <View style={styles.orView}>
-                <View style={styles.orLine}></View>
-                <Text style={styles.orText}>or</Text>
-                <View style={styles.orLine}></View>
-            </View>
-            <TouchableOpacity style={styles.loginBtnFacebook}>
-                <Text style={styles.loginTextFacebook}>Sign Up with Facebook</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.loginBtnGoogle}>
-                <Text style={styles.loginTextGoogle}>Sign Up with Google</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                <Text style={styles.buttonText}>Register</Text>
-            </TouchableOpacity>
+            {loading ? (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#00bfa5" />
+                    <Text style={styles.loadingText}>Loading...</Text>
+                </View>
+            ) : (
+                <>
+                    <Text style={styles.logo}>HealthBoost</Text>
+                    <Text style={styles.subtitle}>Stay Healthy, Stay Strong</Text>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.inputText}
+                            placeholder="Username or Email"
+                            placeholderTextColor="#003f5c"
+                            value={username}
+                            onChangeText={setUsername}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.inputText}
+                            secureTextEntry
+                            placeholder="Password"
+                            placeholderTextColor="#003f5c"
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                    </View>
+                    <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+                        <Text style={styles.loginText}>LOG IN</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+                        <Text style={styles.signupText}>Don't have an account? Sign up now</Text>
+                    </TouchableOpacity>
+                    <View style={styles.orView}>
+                        <View style={styles.orLine}></View>
+                        <Text style={styles.orText}>or</Text>
+                        <View style={styles.orLine}></View>
+                    </View>
+                    <TouchableOpacity style={styles.loginBtnFacebook}>
+                        <Text style={styles.loginTextFacebook}>Sign Up with Facebook</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.loginBtnGoogle}>
+                        <Text style={styles.loginTextGoogle}>Sign Up with Google</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                        <Text style={styles.buttonText}>Register</Text>
+                    </TouchableOpacity>
+                </>
+            )}
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
