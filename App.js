@@ -4,10 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './src/pages/LoginPage';
 import ProfilePage from './src/pages/ProfilePage';
 import WorkoutPage from './src/pages/WorkoutPage';
+import DietaryPlanPage from './src/pages/DietaryPlanPage';
+import RecipeDetailsPage from './src/pages/RecipeDetailsPage';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyCu6LjFrRKGdV5vYc7sU8kFfkOH-vrk8Gw",
@@ -32,6 +33,9 @@ const App = () => {
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Profile" component={ProfilePage} />
         <Stack.Screen name="Workout" component={WorkoutPage} />
+        <Stack.Screen name="DietaryPlan" component={DietaryPlanPage} />
+        {/* <Stack.Screen name="RecipeDetailsPage" component={RecipeDetailsPage} /> */}
+        <Stack.Screen name="RecipeDetails" component={RecipeDetailsPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
