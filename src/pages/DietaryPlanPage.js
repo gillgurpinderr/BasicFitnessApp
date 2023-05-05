@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
-const DietaryPlanPage = ({ route }) => {
+const DietaryPlanPage = ({ route, navigation }) => {
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const calorieIntake = route.params.calorieIntake;
@@ -10,7 +10,7 @@ const DietaryPlanPage = ({ route }) => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=API_KEY&addRecipeInformation=true&maxCalories=${calorieIntake}`);
+        const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=7879384fcdd5455899c08cb0d9984d45&addRecipeInformation=true&maxCalories=${calorieIntake}`);
         setRecipes(response.data.results);
         setIsLoading(false);
       } catch (error) {
@@ -22,12 +22,16 @@ const DietaryPlanPage = ({ route }) => {
   }, [calorieIntake]);
 
   const renderItem = ({ item }) => {
+    const handlePress = () => {
+      navigation.navigate('RecipeDetails', { recipe: item });
+    };
+
     return (
-      <TouchableOpacity style={styles.itemContainer}>
+      <TouchableOpacity style={styles.itemContainer} onPress={handlePress}>
         <Image source={{ uri: item.image }} style={styles.itemImage} />
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.title}</Text>
-          <Text style={styles.itemCalories}>Calories: {item.nutrition.nutrients[0].amount.toFixed()} kcal</Text>
+          <Text style={styles.itemCalories}>Calories: {item.nutrition.nutrients[0].amount} kcal</Text>
         </View>
       </TouchableOpacity>
     );
