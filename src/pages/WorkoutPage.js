@@ -1,66 +1,61 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import axios from 'axios';
 
 const WorkoutPage = () => {
-  const [duration, setDuration] = useState('');
-  const [weight, setWeight] = useState('');
-  const [workouts, setWorkouts] = useState([]);
+  const [exercises, setExercises] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchWorkouts = async () => {
-    try {
-      const response = await fetch(`https://trackapi.nutritionix.com/v2/natural/exercise?query=${weight}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-app-id': '583e5473',
-          'x-app-key': 'd9b315fa0a6c358e10727e19b9c4de89',
-          'x-remote-user-id': '0'
-        },
-        body: JSON.stringify({
-          query: `I lifted ${weight} lbs for ${duration} minutes`
-        })
-      });
-      const json = await response.json();
-      setWorkouts(json.exercises);
-    } catch (error) {
-      console.error(error);
-    }
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const response = await axios.get('https://workout-planner1.p.rapidapi.com/', {
+          headers: {
+            'X-RapidAPI-Key': '6810c91e18msh781d690588d932ep13c04fjsn73d625e5fdc1',
+            'X-RapidAPI-Host': 'workout-planner1.p.rapidapi.com',
+          },
+          params: {
+            time: '30',
+            muscle: 'biceps',
+            location: 'gym',
+            equipment: 'dumbbells'
+          },
+        });
+        setExercises(response.data);
+        setIsLoading(false);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchExercises();
+  }, []);
+
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity style={styles.itemContainer}>
+        <Text style={styles.itemTitle}>{item.title}</Text>
+        <Text style={styles.itemDescription}>{item.description}</Text>
+      </TouchableOpacity>
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Workout Plan</Text>
-      <Text style={styles.subtitle}>Log your workout:</Text>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Duration (minutes)"
-          value={duration}
-          onChangeText={setDuration}
-          keyboardType="numeric"
+      {isLoading ? (
+        <Text style={styles.loadingText}>Loading...</Text>
+      ) : (
+        <FlatList
+          data={exercises}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
         />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Weight (lbs)"
-          value={weight}
-          onChangeText={setWeight}
-          keyboardType="numeric"
-        />
-      </View>
-      <View style={styles.button}>
-        <Button title="Add Workout" onPress={fetchWorkouts} color='#fff' />
-      </View>
-      {workouts.map((workout, index) => (
-        <View key={index} style={styles.workoutContainer}>
-          <Text style={styles.workoutText}>
-            {workout.name}: {workout.nf_calories} calories burned
-          </Text>
-        </View>
-      ))}
+      )}
     </View>
   );
+
 };
 
 const styles = StyleSheet.create({
@@ -71,48 +66,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  logo: {
-    fontWeight: 'bold',
-    fontSize: 48,
-    color: '#fb5b5a',
-    marginBottom: 5,
-    letterSpacing: 2,
-  },
-  subtitle: {
+  loadingText: {
+    color: 'white',
     fontSize: 16,
-    color: '#fff',
-    marginBottom: 20,
+    textAlign: 'center',
   },
-  inputView: {
-    width: '100%',
+  listContainer: {
+    paddingVertical: 20,
+  },
+  itemContainer: {
     backgroundColor: '#f2f2f2',
-    borderRadius: 25,
-    height: 50,
-    marginBottom: 20,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
-  inputText: {
-    height: 50,
+  itemTitle: {
+    fontWeight: 'bold',
+    marginBottom: 5,
     color: '#424242',
   },
-  button: {
-    backgroundColor: '#00bfa5',
-    padding: 10,
-    borderRadius: 25,
-    marginTop: 20,
-    width: '100%',
+  itemDescription: {
+    color: '#424242',
   },
-  workoutContainer: {
-    backgroundColor: '#ddd',
-    padding: 10,
-    borderRadius: 10,
-    marginVertical: 5,
-    width: 300
-  },
-  workoutText: {
-    fontSize: 16
-  }
 });
 
 export default WorkoutPage;
