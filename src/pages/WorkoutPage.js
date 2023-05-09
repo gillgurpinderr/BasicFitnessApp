@@ -16,7 +16,7 @@ const WorkoutPage = ({ route }) => {
           },
           params: {
             time: '30',
-            muscle: 'biceps',
+            muscle: 'biceps, chest, cardio',
             location: 'gym',
             equipment: 'dumbbells'
           },
@@ -53,17 +53,17 @@ const WorkoutPage = ({ route }) => {
   const renderItem = ({ item }) => {
     console.log(item); // Log the item
     return (
-      <TouchableOpacity style={styles.itemContainer}>
-        <Text style={styles.itemTitle}>{item.type}: {item.Exercise}</Text>
-        <Text style={styles.itemDescription}>{item.Time || `${item.Sets} sets of ${item.Reps}`}</Text>
+      <TouchableOpacity style={itemContainerStyle}>
+        <Text style={itemTitleStyle}>{item.type}: {item.Exercise}</Text>
+        <Text style={itemDescriptionStyle}>{item.Time || `${item.Sets} sets of ${item.Reps}`}</Text>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View>
+    <View style={containerStyle}>
       {isLoading ? (
-        <Text>Loading...</Text>
+        <Text style={loadingTextStyle}>Loading...</Text>
       ) : (
         <FlatList
           data={exercises}
@@ -73,6 +73,35 @@ const WorkoutPage = ({ route }) => {
       )}
     </View>
   );
+};
+
+const containerStyle = {
+  flex: 1,
+  justifyContent: 'center',
+  padding: 16,
+};
+
+const loadingTextStyle = {
+  textAlign: 'center',
+  marginBottom: 10,
+};
+
+const itemContainerStyle = {
+  borderWidth: 1,
+  borderColor: '#ddd',
+  padding: 10,
+  borderRadius: 2,
+  marginBottom: 10,
+};
+
+const itemTitleStyle = {
+  fontSize: 18,
+  marginBottom: 4,
+};
+
+const itemDescriptionStyle = {
+  fontSize: 16,
+  color: '#444',
 };
 
 export default WorkoutPage;
