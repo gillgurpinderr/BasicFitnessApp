@@ -6,6 +6,7 @@ import ProfilePage from './src/pages/ProfilePage';
 import WorkoutPage from './src/pages/WorkoutPage';
 import DietaryPlanPage from './src/pages/DietaryPlanPage';
 import RecipeDetailsPage from './src/pages/RecipeDetailsPage';
+import ErrorBoundary from './src/pages/ErrorBoundary';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -30,11 +31,11 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginPage} />
-        <Stack.Screen name="Profile" component={ProfilePage} />
-        <Stack.Screen name="Workout" component={WorkoutPage} />
-        <Stack.Screen name="DietaryPlan" component={DietaryPlanPage} />
-        <Stack.Screen name="RecipeDetails" component={RecipeDetailsPage} />
+        <Stack.Screen name="Login" component={props => <ErrorBoundary><LoginPage {...props} /></ErrorBoundary>} />
+        <Stack.Screen name="Profile" component={props => <ErrorBoundary><ProfilePage {...props} /></ErrorBoundary>} />
+        <Stack.Screen name="Workout" component={props => <ErrorBoundary><WorkoutPage {...props} /></ErrorBoundary>} />
+        <Stack.Screen name="DietaryPlan" component={props => <ErrorBoundary><DietaryPlanPage {...props} /></ErrorBoundary>} />
+        <Stack.Screen name="RecipeDetails" component={props => <ErrorBoundary><RecipeDetailsPage {...props} /></ErrorBoundary>} />
       </Stack.Navigator>
     </NavigationContainer>
   );
