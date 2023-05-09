@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
-const WorkoutPage = () => {
+const WorkoutPage = ({ route }) => {
   const [exercises, setExercises] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,11 +21,29 @@ const WorkoutPage = () => {
             equipment: 'dumbbells'
           },
         });
-        setExercises(response.data);
+
+        // Get the response data
+        const data = response.data;
+
+        // Flatten the data
+        let flattenedData = [];
+        ["Warm Up", "Exercises", "Cool Down"].forEach((key) => {
+          data[key].forEach((item) => {
+            flattenedData.push({
+              id: data._id,
+              type: key,
+              ...item
+            });
+          });
+        });
+
+        console.log('Flattened data:', flattenedData);
+        setExercises(flattenedData);
         setIsLoading(false);
-        console.log(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        setExercises([]);
+        setIsLoading(false);
       }
     };
 
@@ -33,62 +51,28 @@ const WorkoutPage = () => {
   }, []);
 
   const renderItem = ({ item }) => {
+    console.log(item); // Log the item
     return (
       <TouchableOpacity style={styles.itemContainer}>
-        <Text style={styles.itemTitle}>{item.title}</Text>
-        <Text style={styles.itemDescription}>{item.description}</Text>
+        <Text style={styles.itemTitle}>{item.type}: {item.Exercise}</Text>
+        <Text style={styles.itemDescription}>{item.Time || `${item.Sets} sets of ${item.Reps}`}</Text>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       {isLoading ? (
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text>Loading...</Text>
       ) : (
         <FlatList
           data={exercises}
           keyExtractor={(item) => String(item.id)}
           renderItem={renderItem}
-          contentContainerStyle={styles.listContainer}
         />
       )}
     </View>
   );
-
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#003f5c',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  loadingText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  listContainer: {
-    paddingVertical: 20,
-  },
-  itemContainer: {
-    backgroundColor: '#f2f2f2',
-    borderRadius: 10,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  itemTitle: {
-    fontWeight: 'bold',
-    marginBottom: 5,
-    color: '#424242',
-  },
-  itemDescription: {
-    color: '#424242',
-  },
-});
 
 export default WorkoutPage;
